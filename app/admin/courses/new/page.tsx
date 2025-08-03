@@ -5,7 +5,6 @@ import {
   LayoutTitle,
 } from "@/components/layout/layout";
 import { Card, CardContent } from "@/components/ui/card";
-import React from "react";
 
 export default function Page() {
   return (
