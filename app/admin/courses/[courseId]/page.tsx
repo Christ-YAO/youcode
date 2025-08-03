@@ -61,7 +61,10 @@ export default async function CoursePage({
                       <Avatar className="rounded">
                         <AvatarFallback>{user.email?.[0]}</AvatarFallback>
                         {user.image && (
-                          <AvatarImage src={user.image} alt={user.email ?? ''} />
+                          <AvatarImage
+                            src={user.image}
+                            alt={user.email ?? ""}
+                          />
                         )}
                       </Avatar>
                     </TableCell>
@@ -90,7 +93,7 @@ export default async function CoursePage({
             <Avatar className="rounded">
               <AvatarFallback>{course.name?.[0]}</AvatarFallback>
               {course.image && (
-                <AvatarImage src={course.image} alt={course.name ?? ''} />
+                <AvatarImage src={course.image} alt={course.name ?? ""} />
               )}
             </Avatar>
             <CardTitle>{course.name}</CardTitle>
@@ -101,15 +104,15 @@ export default async function CoursePage({
             <Link
               href={`/admin/courses/${course.id}/edit`}
               className={buttonVariants({
-                variant: 'outline',
+                variant: "outline",
               })}
             >
               Edit
-            </Link>{' '}
+            </Link>{" "}
             <Link
               href={`/admin/courses/${course.id}/lessons`}
               className={buttonVariants({
-                variant: 'outline',
+                variant: "outline",
               })}
             >
               Edit lessons
