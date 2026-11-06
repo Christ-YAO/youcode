@@ -7,6 +7,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { PropsWithChildren } from 'react';
 import { Providers } from './Providers';
+// @ts-ignore -- Next.js handles global CSS imports during compilation.
 import './globals.css';
 import { TailwindIndicator } from '@/components/ui/utils/TailwindIndicator';
 
