@@ -1,4 +1,5 @@
 // src/components/layout/Header.
+import Image from "next/image";
 import Link from "next/link";
 import { Typography } from "../ui/Typography";
 import { ThemeToggle } from "../theme/ThemeToggle";
@@ -7,20 +8,19 @@ import { AuthButton } from "../features/auth/AuthButton";
 
 export function Header() {
   return (
-    <header className="bg-background sticky top-0 z-40 w-full border-b">
-      <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <div className="flex gap-2 items-center">
-          <Typography variant="h3" as={Link} href="/">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur">
+      <div className="m-auto flex h-16 w-full max-w-5xl items-center justify-between gap-4 px-4">
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/images/you-code.svg" width={32} height={22} alt="" />
+          <Typography variant="h3" as="span">
             {SiteConfig.title}
           </Typography>
-        </div>
+        </Link>
 
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-1">
-            <AuthButton />
-            <ThemeToggle />
-          </nav>
-        </div>
+        <nav className="flex items-center gap-1">
+          <AuthButton />
+          <ThemeToggle />
+        </nav>
       </div>
     </header>
   );

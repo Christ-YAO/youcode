@@ -1,11 +1,22 @@
+import { CourseImage } from "@/components/features/courses/CourseImage";
+import { EmptyState } from "@/components/layout/EmptyState";
 import {
   Layout,
+  LayoutActions,
+  LayoutBackLink,
   LayoutContent,
   LayoutHeader,
   LayoutTitle,
 } from "@/components/layout/layout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -16,6 +27,7 @@ import {
 } from "@/components/ui/table";
 import { Typography } from "@/components/ui/Typography";
 import { getRequiredAuthSession } from "@/lib/auth";
+import { BookOpen, Pencil, UsersRound } from "lucide-react";
 import Link from "next/link";
 import { getCourse } from "./course.query";
 import { buttonVariants } from "@/components/ui/button";
@@ -38,85 +50,120 @@ export default async function CoursePage({
     userPage: page,
   });
 
+  const stats = [
+    { icon: UsersRound, label: "Users", value: course._count?.users },
+    { icon: BookOpen, label: "Lessons", value: course._count?.lessons },
+  ];
+
   return (
     <Layout>
+      <LayoutBackLink href="/admin/courses">Courses</LayoutBackLink>
       <LayoutHeader>
-        <LayoutTitle>Courses</LayoutTitle>
+        <LayoutTitle className="capitalize">{course.name}</LayoutTitle>
       </LayoutHeader>
-      <LayoutContent className="flex flex-col gap-4 lg:flex-row">
-        <Card className="flex-[2]">
+      <LayoutActions>
+        <Link
+          href={`/admin/courses/${course.id}/edit`}
+          className={buttonVariants({
+            variant: "outline",
+          })}
+        >
+          <Pencil size={14} className="mr-2" />
+          Edit
+        </Link>
+        <Link
+          href={`/admin/courses/${course.id}/lessons`}
+          className={buttonVariants()}
+        >
+          <BookOpen size={14} className="mr-2" />
+          Edit lessons
+        </Link>
+      </LayoutActions>
+      <LayoutContent className="flex flex-col items-start gap-4 lg:flex-row">
+        <Card className="w-full min-w-0 lg:flex-[2]">
           <CardHeader>
-            <CardTitle>Users</CardTitle>
+            <CardTitle className="text-lg">Users</CardTitle>
+            <CardDescription>People registered to this course.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableHead>Image</TableHead>
-                <TableHead>Email</TableHead>
-              </TableHeader>
-              <TableBody>
-                {course.users?.map((user) => (
+            {course.users?.length ? (
+              <Table>
+                <TableHeader>
                   <TableRow>
-                    <TableCell>
-                      <Avatar className="rounded">
-                        <AvatarFallback>{user.email?.[0]}</AvatarFallback>
-                        {user.image && (
-                          <AvatarImage
-                            src={user.image}
-                            alt={user.email ?? ""}
-                          />
-                        )}
-                      </Avatar>
-                    </TableCell>
-                    <TableCell>
-                      <Typography
-                        as={Link}
-                        variant="large"
-                        href={`/admin/users/${user.id}`}
-                      >
-                        {user.email}
-                      </Typography>
-                    </TableCell>
+                    <TableHead>User</TableHead>
+                    <TableHead className="text-right">Status</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <CoursePaginationButton
-              baseUrl={`/admin/courses/${course.id}`}
-              page={page}
-              totalPage={course._count?.users ?? 0 / 5}
-            />
+                </TableHeader>
+                <TableBody>
+                  {course.users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell className="w-full max-w-0">
+                        <div className="flex min-w-0 items-center gap-3">
+                          <Avatar className="size-8">
+                            <AvatarFallback className="text-xs uppercase">
+                              {user.email?.[0]}
+                            </AvatarFallback>
+                            {user.image && (
+                              <AvatarImage
+                                src={user.image}
+                                alt={user.email ?? ""}
+                              />
+                            )}
+                          </Avatar>
+                          <Typography
+                            as={Link}
+                            className="min-w-0 truncate font-medium hover:underline"
+                            href={`/admin/users/${user.id}`}
+                          >
+                            {user.email}
+                          </Typography>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Badge variant={user.canceled ? "outline" : "secondary"}>
+                          {user.canceled ? "Canceled" : "Active"}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <EmptyState
+                icon={UsersRound}
+                title="No users yet"
+                description="Users registered to this course will appear here."
+              />
+            )}
+            {(course._count?.users ?? 0) > 5 && (
+              <CoursePaginationButton
+                baseUrl={`/admin/courses/${course.id}`}
+                page={page}
+                totalPage={course._count?.users ?? 0 / 5}
+              />
+            )}
           </CardContent>
         </Card>
-        <Card className="flex-1">
-          <CardHeader className="flex-row items-center gap-4 space-y-0">
-            <Avatar className="rounded">
-              <AvatarFallback>{course.name?.[0]}</AvatarFallback>
-              {course.image && (
-                <AvatarImage src={course.image} alt={course.name ?? ""} />
-              )}
-            </Avatar>
-            <CardTitle>{course.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-1">
-            <Typography>{course._count?.users} users</Typography>
-            <Typography>{course._count?.lessons} lessons</Typography>
-            <Link
-              href={`/admin/courses/${course.id}/edit`}
-              className={buttonVariants({
-                variant: "outline",
-              })}
-            >
-              Edit
-            </Link>{" "}
-            <Link
-              href={`/admin/courses/${course.id}/lessons`}
-              className={buttonVariants({
-                variant: "outline",
-              })}
-            >
-              Edit lessons
-            </Link>
+        <Card className="w-full overflow-hidden lg:flex-1">
+          <CourseImage name={course.name} image={course.image} />
+          <CardContent className="flex flex-col gap-4 p-4">
+            <div className="grid grid-cols-2 gap-2">
+              {stats.map((stat) => (
+                <div key={stat.label} className="rounded-md border p-3">
+                  <stat.icon size={16} className="text-muted-foreground" />
+                  <p className="mt-2 text-2xl font-semibold">{stat.value}</p>
+                  <p className="text-xs text-muted-foreground">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+            {course.presentation && (
+              <div className="flex flex-col gap-1">
+                <p className="text-sm font-medium">Presentation</p>
+                <p className="whitespace-pre-wrap text-sm text-muted-foreground">
+                  {course.presentation}
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </LayoutContent>

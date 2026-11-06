@@ -1,25 +1,26 @@
-/* eslint-disable @next/next/no-img-element */
+import { CourseImage } from "@/components/features/courses/CourseImage";
+import { EmptyState } from "@/components/layout/EmptyState";
 import {
   Layout,
+  LayoutActions,
+  LayoutBackLink,
   LayoutContent,
+  LayoutDescription,
   LayoutHeader,
   LayoutTitle,
 } from "@/components/layout/layout";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Typography } from "@/components/ui/Typography";
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { getRequiredAuthSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { BookOpen, Plus } from "lucide-react";
 import Link from "next/link";
 
 export default async function CoursesPage() {
@@ -33,62 +34,57 @@ export default async function CoursesPage() {
 
   return (
     <Layout>
-      <div className="flex w-full items-center justify-between">
-        <LayoutHeader>
-          <LayoutTitle>Courses</LayoutTitle>
-        </LayoutHeader>
-        <Link
-          href={"/admin/courses/new"}
-          className={cn(buttonVariants({ variant: "secondary" }), "")}
-        >
-          New course
-        </Link>
-      </div>
+      <LayoutBackLink href="/admin">Dashboard</LayoutBackLink>
+      <LayoutHeader>
+        <LayoutTitle>Courses</LayoutTitle>
+        <LayoutDescription>The courses you created.</LayoutDescription>
+      </LayoutHeader>
+      <Link href={"/admin/courses/new"} className={buttonVariants()}>
+        <Plus size={16} className="mr-2" />
+        New course
+      </Link>
       <LayoutContent>
-        <Card>
-          <CardContent className="mt-4">
-            {courses.length === 0 ? (
-              <p className="text-muted-foreground">
-                No courses yet. Create one!
-              </p>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableHead>Image</TableHead>
-                  <TableHead>Name</TableHead>
-                </TableHeader>
-                <TableBody>
-                  <>
-                    {courses.map((course) => (
-                      <TableRow>
-                        <TableCell>
-                          <Avatar className="rounded">
-                            <AvatarFallback>{course.name[0]}</AvatarFallback>
-                            {course.image && (
-                              <AvatarImage
-                                src={course.image}
-                                alt={course.name}
-                              />
-                            )}
-                          </Avatar>
-                        </TableCell>
-                        <TableCell>
-                          <Typography
-                            as={Link}
-                            variant="large"
-                            href={`/admin/courses/${course.id}`}
-                          >
-                            {course.name}
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </>
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
-        </Card>
+        {courses.length === 0 ? (
+          <Card>
+            <EmptyState
+              icon={BookOpen}
+              title="No courses yet"
+              description="Create your first course to start adding lessons."
+            >
+              <Link
+                href={"/admin/courses/new"}
+                className={buttonVariants({ variant: "outline" })}
+              >
+                Create a course
+              </Link>
+            </EmptyState>
+          </Card>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {courses.map((course) => (
+              <Link
+                key={course.id}
+                href={`/admin/courses/${course.id}`}
+                className="group"
+              >
+                <Card className="flex h-full flex-col overflow-hidden transition-colors group-hover:border-primary/50">
+                  <CourseImage name={course.name} image={course.image} />
+                  <CardHeader className="flex-1 p-4">
+                    <CardTitle className="line-clamp-1 text-lg capitalize">
+                      {course.name}
+                    </CardTitle>
+                    <CardDescription className="line-clamp-2">
+                      {course.presentation}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardFooter className="p-4 pt-0 text-xs text-muted-foreground">
+                    Created on {format(course.createdAt, "MMM d, yyyy")}
+                  </CardFooter>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        )}
       </LayoutContent>
     </Layout>
   );

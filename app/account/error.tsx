@@ -1,7 +1,6 @@
 "use client"; // Error components must be Client Components
 
-import { LoginButton } from "@/components/features/auth/LoginButton";
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { LoginRequiredCard } from "@/components/features/auth/LoginRequiredCard";
 import { useEffect } from "react";
 
 export default function Error({
@@ -16,14 +15,5 @@ export default function Error({
     console.error(error);
   }, [error]);
 
-  return (
-    <Card className="max-w-lg m-auto mt-4">
-        <CardHeader>
-            <CardTitle>You need to be logged in to view this page.</CardTitle>
-        </CardHeader>
-        <CardFooter>
-            <LoginButton />
-        </CardFooter>
-    </Card>
-  );
+  return <LoginRequiredCard />;
 }
