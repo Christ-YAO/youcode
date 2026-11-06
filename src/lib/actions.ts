@@ -1,7 +1,3 @@
-// import { Prisma } from "@prisma/client";
+import { createSafeActionClient } from "next-safe-action";
 
-// const me = Prisma.findUnique({
-//   where: {
-//     id: userId,
-//   },
-// });
+export const actionClient = createSafeActionClient();
