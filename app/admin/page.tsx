@@ -49,7 +49,7 @@ export default async function CoursesPage() {
           <Link key={shortcut.href} href={shortcut.href} className="group">
             <Card className="h-full transition-colors group-hover:border-primary/50 group-hover:bg-accent/50">
               <CardHeader>
-                <div className="mb-2 flex size-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+                <div className="mb-2 flex size-10 items-center justify-center rounded-md bg-primary/10 text-primary dark:text-red-400">
                   <shortcut.icon size={20} />
                 </div>
                 <CardTitle className="flex items-center justify-between text-lg">

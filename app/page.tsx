@@ -48,7 +48,7 @@ export default function Home() {
         {features.map((feature) => (
           <Card key={feature.title}>
             <CardHeader>
-              <div className="mb-2 flex size-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+              <div className="mb-2 flex size-10 items-center justify-center rounded-md bg-primary/10 text-primary dark:text-red-400">
                 <feature.icon size={20} />
               </div>
               <CardTitle className="text-lg">{feature.title}</CardTitle>

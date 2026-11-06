@@ -32,7 +32,7 @@ const typographyVariants = cva('', {
       large: 'text-lg font-semibold',
       small: 'text-sm font-medium leading-none',
       muted: 'text-sm text-muted-foreground',
-      link: 'text-indigo-500 font-medium hover:underline',
+      link: 'text-primary dark:text-red-400 font-medium hover:underline',
     },
   },
   defaultVariants: {
