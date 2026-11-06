@@ -16,8 +16,16 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getAuthSession } from "@/lib/auth";
 
-export default function Page() {
+export default async function Page() {
+  const session = await getAuthSession();
+  const user = session?.user;
+
+  if (!user) {
+    throw new Error("User is not authenticated");
+  }
+
   return (
     <Layout className="max-w-2xl">
       <LayoutBackLink href="/account">Account</LayoutBackLink>
@@ -49,11 +57,11 @@ export default function Page() {
             <fieldset disabled className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Your name" />
+                <Input id="name" value={user?.name ?? ""} placeholder="Your name" />
               </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="you@example.com" />
+                <Input id="email" type="email" value={user?.email ?? ""} placeholder="you@example.com" />
               </div>
             </fieldset>
           </CardContent>
