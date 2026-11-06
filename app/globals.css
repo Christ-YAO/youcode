@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 94%;
     --foreground: 0 0% 9%;
-    --card: 0 0% 100%;
+    --card: 0 0% 98%;
     --card-foreground: 0 0% 9%;
-    --popover: 0 0% 100%;
+    --popover: 0 0% 98%;
     --popover-foreground: 0 0% 9%;
     /* Logo red (#FF0000) darkened to #E60000 so white text stays readable. */
     --primary: 0 100% 45%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96%;
+    --secondary: 0 0% 90%;
     --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 0 0% 96%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 36%;
+    --accent: 0 0% 90%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 72% 36%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
+    --border: 0 0% 82%;
+    --input: 0 0% 82%;
     --ring: 0 100% 45%;
     --radius: 0.5rem;
   }
